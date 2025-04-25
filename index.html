@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IG 互追比對小工具</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 20px;
+      font-family: monospace;
+      padding: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>IG 互追比對工具</h1>
+
+  <p><strong>你追蹤的帳號（Following）：</strong></p>
+  <textarea id="following" placeholder="每行一個帳號，例如：user1&#10;user2&#10;user3"></textarea>
+
+  <p><strong>追蹤你的帳號（Followers）：</strong></p>
+  <textarea id="followers" placeholder="每行一個帳號，例如：user2&#10;user4"></textarea>
+
+  <button onclick="checkUnfollowers()">比對沒有回追我的人</button>
+
+  <div id="result"></div>
+
+  <script>
+    function checkUnfollowers() {
+      const followingText = document.getElementById('following').value.trim();
+      const followersText = document.getElementById('followers').value.trim();
+
+      const following = new Set(followingText.split('\n').map(a => a.trim().toLowerCase()).filter(a => a));
+      const followers = new Set(followersText.split('\n').map(a => a.trim().toLowerCase()).filter(a => a));
+
+      const notFollowingBack = Array.from(following).filter(user => !followers.has(user));
+
+      const resultBox = document.getElementById('result');
+      if (notFollowingBack.length === 0) {
+        resultBox.innerText = '所有人都有回追你，恭喜！';
+      } else {
+        resultBox.innerText = '以下帳號沒有回追你：\n\n' + notFollowingBack.join('\n');
+      }
+    }
+  </script>
+</body>
+</html>
